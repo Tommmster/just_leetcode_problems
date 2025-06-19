@@ -8,8 +8,9 @@ import (
 	"testing"
 )
 
+// 55 jump game
 func TestCanJump(t *testing.T) {
-	tests := []struct {
+	tt := []struct {
 		name     string
 		nums     []int
 		expected bool
@@ -66,11 +67,11 @@ func TestCanJump(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := canJump(tt.nums)
-			if result != tt.expected {
-				t.Errorf("canJump(%v) = %v; expected %v", tt.nums, result, tt.expected)
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			if result := canJump(tc.nums); result != tc.expected {
+				t.Errorf("canJump(%v) = %v; expected %v", tc.nums, result, tc.expected)
 			}
 		})
 	}

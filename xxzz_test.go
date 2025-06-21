@@ -2,7 +2,6 @@ package main
 
 import (
 	"cmp"
-	"fmt"
 	"reflect"
 	"slices"
 	"testing"
@@ -426,27 +425,76 @@ func TestAtoi(t *testing.T) {
 }
 
 func TestLongestOnes(t *testing.T) {
-	tt := []struct {
+	tests := []struct {
+		name     string
 		nums     []int
 		k        int
 		expected int
 	}{
-		{nums: []int{1, 1, 0, 1, 1, 1}, k: 0, expected: 3},
-		{nums: []int{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0}, k: 0, expected: 4},
-		{nums: []int{1, 1, 1, 0, 0, 1, 0}, k: 2, expected: 6},
-		{nums: []int{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0}, k: 2, expected: 6},
-		{nums: []int{0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1}, k: 3, expected: 10},
+		{
+			name:     "no flips needed",
+			nums:     []int{1, 1, 1, 1, 1},
+			k:        2,
+			expected: 5,
+		},
+		{
+			name:     "flip one zero in the middle",
+			nums:     []int{1, 0, 1, 1, 0},
+			k:        1,
+			expected: 4,
+		},
+		{
+			name:     "flip two zeros",
+			nums:     []int{0, 0, 1, 1, 1, 0, 0},
+			k:        2,
+			expected: 5,
+		},
+		{
+			name:     "not enough flips to merge groups",
+			nums:     []int{1, 0, 1, 0, 1},
+			k:        1,
+			expected: 3,
+		},
+		{
+			name:     "all zeros, flip all",
+			nums:     []int{0, 0, 0},
+			k:        3,
+			expected: 3,
+		},
+		{
+			name:     "all zeros, flip some",
+			nums:     []int{0, 0, 0, 0},
+			k:        2,
+			expected: 2,
+		},
+		{
+			name:     "no flips allowed",
+			nums:     []int{1, 0, 1, 1, 0, 1},
+			k:        0,
+			expected: 2,
+		},
+		{
+			name:     "empty input",
+			nums:     []int{},
+			k:        1,
+			expected: 0,
+		},
+		{
+			name:     "xxx",
+			nums:     []int{0, 0 /**/, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1 /**/, 0, 0, 0, 1, 1, 1, 1},
+			k:        3,
+			expected: 10,
+		},
 	}
 
-	for i, tc := range tt {
-		t.Run(fmt.Sprintf("%s %d", t.Name(), i), func(t *testing.T) {
-			t.Parallel()
-			if a := longestOnes(tc.nums, tc.k); a != tc.expected {
-				t.Errorf("Expected %d, got %d\n", tc.expected, a)
+	for i, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := longestOnes(tt.nums, tt.k)
+			if result != tt.expected {
+				t.Errorf("%d/ longestOnes(%v, %d) = %d; want %d", i, tt.nums, tt.k, result, tt.expected)
 			}
 		})
 	}
-
 }
 
 func BenchmarkRotate(b *testing.B) {

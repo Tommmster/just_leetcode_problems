@@ -480,7 +480,7 @@ func TestLongestOnes(t *testing.T) {
 			expected: 0,
 		},
 		{
-			name:     "xxx",
+			name:     "move window starting with zeroes",
 			nums:     []int{0, 0 /**/, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1 /**/, 0, 0, 0, 1, 1, 1, 1},
 			k:        3,
 			expected: 10,

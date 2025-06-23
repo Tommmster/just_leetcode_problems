@@ -19,7 +19,11 @@ func lengthOfLongestSubstring(s string) int {
 	for i := 1; i < l; i++ {
 		v := string(s[i])
 
-		if previous, ok := seen[v]; ok { // v was already in the window
+		previous, ok := seen[v]
+		if !ok || previous < start {
+			seen[v] = i
+			end += 1
+		} else {
 			// Was this window better than the one before ?
 			maxw = max(end-start, maxw)
 
@@ -32,15 +36,10 @@ func lengthOfLongestSubstring(s string) int {
 			// one
 			end = i + 1
 
-			//it's a new window, map should contain it's values
-			seen = map[string]int{}
-			for j := start; j < end; j++ {
-				vv := string(s[j])
-				seen[vv] = j
-			}
-		} else { // e is brand new, register it
+			// Update the position of the relevant values
+			atStart := string(s[start])
+			seen[atStart] = start
 			seen[v] = i
-			end += 1
 		}
 	}
 

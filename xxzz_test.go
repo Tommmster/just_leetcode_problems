@@ -2,6 +2,7 @@ package main
 
 import (
 	"cmp"
+	"fmt"
 	"reflect"
 	"slices"
 	"testing"
@@ -492,6 +493,60 @@ func TestLongestOnes(t *testing.T) {
 			result := longestOnes(tt.nums, tt.k)
 			if result != tt.expected {
 				t.Errorf("%d/ longestOnes(%v, %d) = %d; want %d", i, tt.nums, tt.k, result, tt.expected)
+			}
+		})
+	}
+}
+
+func TestLongestUniqueSubstring(t *testing.T) {
+	tt := []struct {
+		s        string
+		expected int
+	}{
+		{
+			s:        "abcabcbb",
+			expected: 3, // "abc"
+		},
+		{
+			s:        "bbbbb",
+			expected: 1, // "b"
+		},
+		{
+			s:        "pwwkew",
+			expected: 3, // "wke"
+		},
+		{
+			s:        "",
+			expected: 0, // empty string
+		},
+		{
+			s:        " ",
+			expected: 1, // single space
+		},
+		{
+			s:        "au",
+			expected: 2, // "au"
+		},
+		{
+			s:        "dvdf",
+			expected: 3, // "vdf"
+		},
+		{
+			s:        "abba",
+			expected: 2, // "ab" or "ba"
+		},
+		{
+			s:        "abcdef",
+			expected: 6, // whole string is unique
+		},
+	}
+
+	for i, tc := range tt {
+		t.Run(fmt.Sprintf("Test %d", i), func(t *testing.T) {
+			t.Parallel()
+
+			if got := lengthOfLongestSubstring(tc.s); got != tc.expected {
+				t.Errorf("failed: input=%s, got=%d, expected=%d", tc.s, got, tc.expected)
 			}
 		})
 	}

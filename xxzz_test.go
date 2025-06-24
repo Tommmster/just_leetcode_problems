@@ -552,6 +552,47 @@ func TestLongestUniqueSubstring(t *testing.T) {
 	}
 }
 
+func TestProductExceptSelf(t *testing.T) {
+	tt := []struct {
+		nums     []int
+		expected []int
+	}{
+		{
+			nums:     []int{1, 2, 3, 4},
+			expected: []int{24, 12, 8, 6},
+		},
+		{
+			nums:     []int{0, 1, 2, 3},
+			expected: []int{6, 0, 0, 0}, // only one zero
+		},
+		{
+			nums:     []int{0, 0, 1, 2},
+			expected: []int{0, 0, 0, 0}, // two zeros, all outputs are 0
+		},
+		{
+			nums:     []int{5},
+			expected: []int{1}, // edge case: single element
+		},
+		{
+			nums:     []int{2, 3},
+			expected: []int{3, 2},
+		},
+		{
+			nums:     []int{-1, 1, 0, -3, 3},
+			expected: []int{0, 0, 9, 0, 0}, // zero in center
+		},
+	}
+
+	for i, tc := range tt {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			got := productExceptSelf(tc.nums)
+			if !reflect.DeepEqual(got, tc.expected) {
+				t.Errorf("productExceptSelf(%v) = %v; expected %v", tc.nums, got, tc.expected)
+			}
+		})
+	}
+}
+
 func BenchmarkRotate(b *testing.B) {
 	nums := make([]int, 1000)
 	for i := 0; i < 1000; i++ {

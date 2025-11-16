@@ -611,14 +611,15 @@ func TestMajorityElement(t *testing.T) {
 		{[]int{3, 2, 3, 2, 2}, 2},
 	}
 
-	for _, tt := range tests {
-		got := majorityElement(tt.nums)
-		if got != tt.expected {
-			t.Errorf("majorityElement(%v) = %d, want %d",
-				tt.nums, got, tt.expected)
-		}
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := majorityElement(tt.nums)
+			if got != tt.expected {
+				t.Errorf("majorityElement(%v) = %d, want %d",
+					tt.nums, got, tt.expected)
+			}
+		})
 	}
-
 }
 
 func TestRLE(t *testing.T) {

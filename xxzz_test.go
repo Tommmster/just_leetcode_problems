@@ -766,6 +766,42 @@ func TestLowercaseTrieLCP(t *testing.T) {
 	}
 }
 
+func TestIsSubsequence(t *testing.T) {
+	tests := []struct {
+		s    string
+		t    string
+		want bool
+	}{
+		{"abc", "ahbgdc", true},
+		{"axc", "ahbgdc", false},
+
+		{"", "anything", true},
+		{"a", "", false},
+		{"", "", true},
+
+		{"a", "a", true},
+		{"a", "b", false},
+
+		{"aaa", "aaaaaa", true},
+		{"aaaa", "aaa", false},
+
+		{"bca", "abc", false},
+
+		{"áç", "xáyçz", true},
+		{"çá", "xáyçz", false},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := isSubsequence(tt.s, tt.t)
+			if got != tt.want {
+				t.Fatalf("isSubsequence(%q, %q) = %v, want %v",
+					tt.s, tt.t, got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRLE(t *testing.T) {
 	t.Run("empty input should return empty output", func(t *testing.T) {
 		if rleLike("") != "" {

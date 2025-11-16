@@ -24,10 +24,4 @@ func rotate(nums []int, k int) {
 	doReverse(0, len(nums)-1)
 	doReverse(0, k-1)
 	doReverse(k, len(nums)-1)
-
-	//	for i := 0; i < k; i++ {
-	//		aux := nums[l]
-	//		copy(nums[1:], nums[:l])
-	//		nums[0] = aux
-	//	}
 }

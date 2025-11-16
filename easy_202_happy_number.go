@@ -10,41 +10,23 @@ package main
 //
 // Return true if n is a happy number, and false if not.
 // E.g 19 -> 1 + 81 = 82 -> 64 + 4 = 68 -> 36 + 64 = 100 -> 1
-
 func isHappy(n int) bool {
-
 	seen := make(map[int]struct{})
 
-	return isHappyInner(n, seen)
-}
+	for n != 1 {
+		if _, ok := seen[n]; ok {
+			return false
+		}
 
-func isHappyInner(n int, seen map[int]struct{}) bool {
-	digits := []int{}
+		seen[n] = struct{}{}
 
-	if _, ok := seen[n]; ok {
-		return false
+		var sqsum int
+		for m := n; m > 0; m /= 10 {
+			d := m % 10
+			sqsum += d * d
+		}
+
+		n = sqsum
 	}
-
-	seen[n] = struct{}{}
-
-	for n > 0 {
-		r := n % 10
-		n = n / 10
-
-		digits = append(digits, r)
-	}
-	if n > 0 {
-		digits = append(digits, n)
-	}
-
-	// Add the squares
-	sqsum := 0
-	for _, e := range digits {
-		sqsum += e * e
-	}
-
-	if sqsum == 1 {
-		return true
-	}
-	return isHappyInner(sqsum, seen)
+	return true
 }

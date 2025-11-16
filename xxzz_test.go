@@ -622,6 +622,68 @@ func TestMajorityElement(t *testing.T) {
 	}
 }
 
+func TestTwoSum(t *testing.T) {
+	tests := []struct {
+		name   string
+		nums   []int
+		target int
+		want   []int
+	}{
+		{
+			name:   "basic example",
+			nums:   []int{2, 7, 11, 15},
+			target: 9,
+			want:   []int{0, 1},
+		},
+		{
+			name:   "two elements",
+			nums:   []int{3, 3},
+			target: 6,
+			want:   []int{0, 1},
+		},
+		{
+			name:   "unsorted array",
+			nums:   []int{1, 4, 5, 6},
+			target: 10,
+			want:   []int{1, 3},
+		},
+		{
+			name:   "negatives included",
+			nums:   []int{-1, -2, -3, -4, -5},
+			target: -8,
+			want:   []int{2, 4},
+		},
+		{
+			name:   "mixed positives and negatives",
+			nums:   []int{-3, 4, 3, 90},
+			target: 0,
+			want:   []int{0, 2},
+		},
+		{
+			name:   "zeros",
+			nums:   []int{0, 4, 3, 0},
+			target: 0,
+			want:   []int{0, 3},
+		},
+		{
+			name:   "large numbers",
+			nums:   []int{1000000, 3, 999997},
+			target: 1000000,
+			want:   []int{1, 2},
+		},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := twoSum(tt.nums, tt.target)
+
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("twoSum(%v, %d) = %v, want %v", tt.nums, tt.target, got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRLE(t *testing.T) {
 	t.Run("empty input should return empty output", func(t *testing.T) {
 		if rleLike("") != "" {

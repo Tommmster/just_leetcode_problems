@@ -6,7 +6,7 @@ package main
 // Then return the number of elements in nums which are not equal to val.
 func removeElement(nums []int, val int) int {
 
-	needleCount := 0
+	valCount := 0
 
 	// Change the array nums such that the first k elements of
 	// nums contain the elements which are not equal to val. The
@@ -16,16 +16,14 @@ func removeElement(nums []int, val int) int {
 
 	for i := l - 1; i >= 0; i-- {
 		if e := nums[i]; e == val {
-			needleCount += 1
+			valCount += 1
 
-			target := l - needleCount
+			target := l - valCount
 			source := i
 
-			tmp := nums[source]
-			nums[source] = nums[target]
-			nums[target] = tmp
+			nums[source], nums[target] = nums[target], nums[source]
 		}
 	}
 
-	return len(nums) - needleCount /* number of elements not equal to val */
+	return len(nums) - valCount /* number of elements not equal to val */
 }

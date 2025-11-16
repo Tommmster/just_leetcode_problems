@@ -735,6 +735,37 @@ func TestLongestCommonPrefix(t *testing.T) {
 	}
 }
 
+func TestLowercaseTrieLCP(t *testing.T) {
+	tests := []struct {
+		words  []string
+		expect string
+	}{
+		{[]string{"flower", "flow", "flight"}, "fl"},
+		{[]string{"dog", "racecar", "car"}, ""},
+		{[]string{"interview", "internet", "internal"}, "inter"},
+		{[]string{"a", "a", "a"}, "a"},
+		{[]string{"", "abc", "abcd"}, ""},
+		{[]string{"single"}, "single"},
+		{[]string{}, ""},
+		{[]string{"", ""}, ""},
+		{[]string{"aa", "aa"}, "aa"},
+		{[]string{"ab", "a"}, "a"},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			trie := MakeLowercaseTrie()
+			for _, w := range tt.words {
+				_ = trie.Put(w)
+			}
+			got := trie.LongestCommonPrefix()
+			if got != tt.expect {
+				t.Errorf("LCP(%v) = [%v], expected [%v]", tt.words, got, tt.expect)
+			}
+		})
+	}
+}
+
 func TestRLE(t *testing.T) {
 	t.Run("empty input should return empty output", func(t *testing.T) {
 		if rleLike("") != "" {

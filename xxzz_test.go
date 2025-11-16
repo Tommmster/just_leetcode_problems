@@ -593,18 +593,32 @@ func TestProductExceptSelf(t *testing.T) {
 	}
 }
 
-func BenchmarkRotate(b *testing.B) {
-	nums := make([]int, 1000)
-	for i := 0; i < 1000; i++ {
-		nums[i] = i
-	}
-	k := 123
+//169
+func TestMajorityElement(t *testing.T) {
 
-	for i := 0; i < b.N; i++ {
-		tmp := make([]int, len(nums))
-		copy(tmp, nums)
-		rotate(tmp, k)
+	tests := []struct {
+		nums     []int
+		expected int
+	}{
+		// passing cases
+		{[]int{6, 5, 5}, 5},
+		{[]int{5, 5, 6}, 5},
+		{[]int{2, 2, 1}, 2},
+		{[]int{1, 1, 1, 2, 3}, 1},
+		{[]int{9, 9, 9, 1, 1}, 9},
+
+		// failing case for YOUR CURRENT IMPLEMENTATION:
+		{[]int{3, 2, 3, 2, 2}, 2},
 	}
+
+	for _, tt := range tests {
+		got := majorityElement(tt.nums)
+		if got != tt.expected {
+			t.Errorf("majorityElement(%v) = %d, want %d",
+				tt.nums, got, tt.expected)
+		}
+	}
+
 }
 
 func TestRLE(t *testing.T) {

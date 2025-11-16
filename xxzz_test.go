@@ -684,6 +684,31 @@ func TestTwoSum(t *testing.T) {
 	}
 }
 
+func TestIsHappy(t *testing.T) {
+	tests := []struct {
+		input  int
+		expect bool
+	}{
+		{1, true},
+		{7, true},
+		{10, true},
+		{19, true},
+		{2, false},
+		{3, false},
+		{4, false},
+		{20, false},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			got := isHappy(tt.input)
+			if got != tt.expect {
+				t.Errorf("isHappy(%d) = %v, expected %v", tt.input, got, tt.expect)
+			}
+		})
+	}
+}
+
 func TestRLE(t *testing.T) {
 	t.Run("empty input should return empty output", func(t *testing.T) {
 		if rleLike("") != "" {

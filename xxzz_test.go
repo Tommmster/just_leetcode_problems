@@ -802,6 +802,50 @@ func TestIsSubsequence(t *testing.T) {
 	}
 }
 
+func TestStrStr(t *testing.T) {
+	tests := []struct {
+		haystack string
+		needle   string
+		want     int
+	}{
+		// Basic cases
+		{"hello", "ll", 2},
+		{"aaaaa", "bba", -1},
+		{"", "", 0},
+		{"abc", "", 0},
+		{"", "a", -1},
+
+		// Single char
+		{"a", "a", 0},
+		{"a", "b", -1},
+
+		// Overlapping
+		{"aaa", "aa", 0},
+
+		// Required: mississippi cases
+		{"mississippi", "issip", 4},
+		{"mississippi", "issi", 1},
+		{"mississippi", "mississippia", -1},
+		{"mississippi", "pi", 9},
+		{"mississippi", "p", 8},
+
+		// Additional robustness
+		{"abcde", "e", 4},
+		{"abcde", "de", 3},
+		{"abcabcabcd", "abcabcd", 3},
+	}
+
+	for i, tc := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := strStr(tc.haystack, tc.needle)
+			if got != tc.want {
+				t.Errorf("strStr(%q, %q) = %d, want %d",
+					tc.haystack, tc.needle, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestRLE(t *testing.T) {
 	t.Run("empty input should return empty output", func(t *testing.T) {
 		if rleLike("") != "" {

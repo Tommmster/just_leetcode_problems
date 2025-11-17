@@ -2,6 +2,7 @@ package main
 
 import (
 	"cmp"
+	"errors"
 	"fmt"
 	"reflect"
 	"slices"
@@ -850,18 +851,49 @@ func TestMostCommon(t *testing.T) {
 	tests := []struct {
 		input    []int
 		expected int
+		err      error
 	}{
-		{[]int{1, 2, 2, 3}, 2},
-		{[]int{5}, 5},
-		{[]int{7, 7, 7}, 7},
-		{[]int{1, 2, 3}, 0},
-		{[]int{4, 4, 5, 5}, 0},
+		{[]int{1, 2, 2, 3}, 2, nil},
+		{[]int{5}, 5, nil},
+		{[]int{7, 7, 7}, 7, nil},
+		{[]int{1, 2, 3}, 0, nil},
+		{[]int{4, 4, 5, 5}, 0, nil},
+		{[]int{}, 0, errors.New("decoy")},
 	}
 
 	for i, tt := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
-			got := MostCommon(tt.input)
-			if tt.expected != 0 && got != tt.expected {
+			got, err := MostCommon(tt.input)
+
+			if tt.err != nil && err == nil {
+				t.Fatalf("Expected an error, got nothing")
+			} else if tt.err == nil && err != nil {
+				t.Fatalf("Didn't expect an error, got %v", err)
+			} else if tt.expected != 0 && got != tt.expected {
+				t.Fatalf("got %d, expected %d", got, tt.expected)
+			}
+		})
+	}
+}
+
+func TestMostCommonIndex(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected int
+	}{
+		{[]int{1, 2, 2, 3}, 1}, // 2 is most common, first at index 1
+		{[]int{5}, 0},          // only element
+		{[]int{7, 7, 7}, 0},    // all same
+		{[]int{1, 2, 3}, 0},    // all once → return index of the first element you pick; any valid, but conventional: 0
+		{[]int{4, 4, 5, 5}, 0}, // tie → return 0, the first one
+		{[]int{4, 4, 5, 5}, 0}, // tie → return 0, the first one
+		{[]int{}, -1},          // empty list → return -1
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := MostCommonIndex(tt.input)
+			if got != tt.expected {
 				t.Fatalf("got %d, expected %d", got, tt.expected)
 			}
 		})

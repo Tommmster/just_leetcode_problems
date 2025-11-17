@@ -876,6 +876,77 @@ func TestMostCommon(t *testing.T) {
 	}
 }
 
+func TestTopKFrequent(t *testing.T) {
+	tests := []struct {
+		nums     []int
+		k        int
+		expected []int
+	}{
+		{
+			nums:     []int{1, 1, 1, 2, 2, 3},
+			k:        2,
+			expected: []int{1, 2},
+		},
+		{
+			nums:     []int{5, 4, 3, 2, 1},
+			k:        3,
+			expected: []int{5, 4, 3}, // any 3 ok
+		},
+		{
+			nums:     []int{7},
+			k:        1,
+			expected: []int{7},
+		},
+		{
+			nums:     []int{1, 2, 3, 4},
+			k:        4,
+			expected: []int{1, 2, 3, 4},
+		},
+		{
+			nums:     []int{-1, -1, -2, -2, -2, -3},
+			k:        1,
+			expected: []int{-2},
+		},
+		{
+			nums:     []int{1, 2, 3, 4},
+			k:        2,
+			expected: []int{1, 2},
+		},
+		{
+			nums:     []int{1, 1, 1, 1, 2, 2, 2, 3},
+			k:        2,
+			expected: []int{1, 2},
+		},
+		{
+			nums:     []int{9, 9, 1, 2, 3, 3, 3},
+			k:        1,
+			expected: []int{3},
+		},
+		{
+			nums:     []int{1, 2, 2, 3, 3, 4, 4},
+			k:        3,
+			expected: []int{2, 3, 4},
+		},
+		{
+			nums:     []int{1, 1, 2},
+			k:        0,
+			expected: []int{},
+		},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			got := topKFrequent(tt.nums, tt.k)
+			slices.Sort(got)
+			slices.Sort(tt.expected)
+			if !reflect.DeepEqual(got, tt.expected) {
+				t.Logf("topKFrequent(%v, %d)\n", tt.nums, tt.k)
+				t.Errorf("expected %v, got %v", tt.expected, got)
+			}
+		})
+	}
+}
+
 func TestMostCommonIndex(t *testing.T) {
 	tests := []struct {
 		input    []int

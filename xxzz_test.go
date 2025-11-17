@@ -846,6 +846,28 @@ func TestStrStr(t *testing.T) {
 	}
 }
 
+func TestMostCommon(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected int
+	}{
+		{[]int{1, 2, 2, 3}, 2},
+		{[]int{5}, 5},
+		{[]int{7, 7, 7}, 7},
+		{[]int{1, 2, 3}, 0},
+		{[]int{4, 4, 5, 5}, 0},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := MostCommon(tt.input)
+			if tt.expected != 0 && got != tt.expected {
+				t.Fatalf("got %d, expected %d", got, tt.expected)
+			}
+		})
+	}
+}
+
 func TestRLE(t *testing.T) {
 	t.Run("empty input should return empty output", func(t *testing.T) {
 		if rleLike("") != "" {

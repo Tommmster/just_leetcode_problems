@@ -72,10 +72,9 @@ func (h *Heap) Get() (int, error) {
 	}
 
 	root := h.data[0] //get the root
-	last := h.siz - 1
 	h.siz--
 	if h.siz > 0 {
-		h.data[0] = h.data[last]
+		h.data[0] = h.data[h.siz]
 		down(h.data, 0, h.siz)
 	}
 

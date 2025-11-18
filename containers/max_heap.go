@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// From Algorithms (Sedgewick / Wayne):
 // In a binary heap, the keys are stored in an array such that each key is guaranteed to be larger than (or equal to)
 // the keys at two other specific positions. In turn, each of those keys must be larger than (or equal to) two
 // additional keys, and so forth.
@@ -113,7 +114,6 @@ func down(data []int, i int, siz int) {
 }
 
 // A new element is inserted, we need to check wether it is greater than it's parent
-
 func up(data []int, i int) {
 	for i > 0 {
 		p := (i - 1) / 2

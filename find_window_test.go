@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// This is an exersize on the sliding window, used to solve
+// This is an exercise on the sliding window, used to solve
 // a number of problems (e.g finding the largest palindrome, etc)
 // The exercise at hand is to find all the windows, specified by the start(inclusive)
 // end end(exclusive) indexes

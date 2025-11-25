@@ -11,16 +11,20 @@ func reverseList(head *ListNode) *ListNode {
 		return head
 	}
 
-	return rev(head.Next, head)
+	next := head.Next
+	head.Next = nil // The current head will be the last node of the reverse list
+
+	return rev(next, head)
 }
 
-func rev(current *ListNode, prev *ListNode) *ListNode {
+func rev(current *ListNode, previous *ListNode) *ListNode {
 	if current.Next == nil {
-		current.Next = prev
+		// Point backwards, return the new head
+		current.Next = previous
 		return current
 	} else {
 		p := rev(current.Next, current)
-		current.Next = prev
-		return p
+		current.Next = previous // Point backwards
+		return p                // Return the new head
 	}
 }

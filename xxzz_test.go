@@ -9,6 +9,56 @@ import (
 	"testing"
 )
 
+func TestReverseLinkedList(t *testing.T) {
+
+	mustSetupList := func(values ...int) *ListNode {
+		l := len(values)
+		if l == 0 {
+			return nil
+		} else if l == 1 {
+			return &ListNode{Val: values[0]}
+		}
+
+		last := l - 1
+		curr := &ListNode{Val: values[last]}
+		for i := last - 1; i >= 0; i-- {
+			temp := &ListNode{Val: values[i], Next: curr}
+			curr = temp
+		}
+		return curr
+	}
+	t.Run("Must reverse non trivial list", func(t *testing.T) {
+		t.Parallel()
+		head := mustSetupList(1, 2, 3, 4, 5)
+		if head.Val != 1 {
+			t.Fatalf("Wrong head, expected %d got %d\n", 1, head.Val)
+		}
+
+		head = reverseList(head)
+		if head.Val != 5 {
+			t.Fatalf("Wrong head, expected %d got %d\n", 5, head.Val)
+		}
+	})
+	t.Run("Must reverse single element list", func(t *testing.T) {
+		t.Parallel()
+		head := mustSetupList(1)
+		if head.Val != 1 {
+			t.Fatalf("Wrong head, expected %d got %d\n", 1, head.Val)
+		}
+
+		head = reverseList(head)
+		if head.Val != 1 {
+			t.Fatalf("Wrong head, expected %d got %d\n", 1, head.Val)
+		}
+	})
+	t.Run("Empty list returns itself", func(t *testing.T) {
+		h := reverseList(nil)
+		if h != nil {
+			t.Fatal("Expected nil list")
+		}
+	})
+}
+
 // 55 jump game
 func TestCanJump(t *testing.T) {
 	tt := []struct {

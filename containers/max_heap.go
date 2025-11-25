@@ -18,28 +18,29 @@ import (
 // The heap operations that we consider work by first making a simple modification that could violate the heap
 // condition, then traveling through the heap, modifying the heap as required to ensure the heap condition is satisfied
 // everywhere. We refer to this process as *reheapifying*, or restoring heap order.
+
 type Heap struct {
 	data []int
 	n    int // max capacity
 	siz  int // current size
 }
 
-func NewHeap(n int, data ...int) *Heap {
+func NewHeap(n int, data ...int) (*Heap, error) {
 	if len(data) > n {
-		return nil // TODO error
+		return nil, errHeapFull
+	} else if n <= 0 {
+		return nil, errHeapEmpty
 	}
 
 	if len(data) == 0 {
-		return &Heap{data: make([]int, n), n: n}
+		return &Heap{data: make([]int, n), n: n}, nil
 	}
-	//We could optimize for n=1 and n=2 and skip the 'down' process, but it's an early optimization
 
 	l := len(data)
 	for i := l/2 - 1; i >= 0; i-- {
 		down(data, i, l)
 	}
-
-	return &Heap{data: data, n: n, siz: l}
+	return &Heap{data: data, n: n, siz: l}, nil
 }
 
 // Add insert a new element into the heap

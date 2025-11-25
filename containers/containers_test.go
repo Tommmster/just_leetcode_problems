@@ -3,12 +3,37 @@ package containers
 import "testing"
 
 func TestHeap(t *testing.T) {
-	setUp := func(maxSize int, values ...int) *Heap {
-		return NewHeap(maxSize, values...)
+	mustSetUp := func(maxSize int, values ...int) *Heap {
+		h, err := NewHeap(maxSize, values...)
+		if err != nil {
+			t.Fatalf("Failed to create heap %s", err)
+		}
+
+		return h
 	}
 
-	t.Run("peek returns but doesn't remove", func(t *testing.T) {
-		heap := setUp(5, 3, 10, 22)
+	t.Run("Can add elements up to the max size", func(t *testing.T) {
+		var (
+			capacity = 1
+			h        = mustSetUp(capacity)
+		)
+
+		err := h.Add(10)
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+
+		if err := h.Add(15); err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		if siz := h.Size(); siz != capacity {
+			t.Fatalf("expected an full stack (with %d elements), but it has %d elements", capacity, siz)
+		}
+	})
+
+	t.Run("Peek returns but doesn't remove", func(t *testing.T) {
+		heap := mustSetUp(5, 3, 10, 22)
 		{
 			v, _ := heap.Peek()
 			if v != 22 {
@@ -21,22 +46,15 @@ func TestHeap(t *testing.T) {
 				t.Fatalf("Expected 22, got %d", v)
 			}
 		}
-	})
 
-	t.Run("Single get", func(t *testing.T) {
-		heap := setUp(1, 2)
-
-		v, _ := heap.Get()
-		if v != 2 {
-			t.Fatalf("Expected 2, got %d", v)
-		}
-		if heap.Size() > 0 {
-			t.Fatalf("expected empty")
+		if siz := heap.Size(); siz != 3 {
+			t.Fatalf("Expected 3 elements, got %d", siz)
 		}
 	})
+
 	t.Run("Get removes the root", func(t *testing.T) {
 		values := []int{2, 15, 3, 10, 1}
-		heap := setUp(5, values...)
+		heap := mustSetUp(5, values...)
 
 		{
 			root, _ := heap.Get()

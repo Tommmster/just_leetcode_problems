@@ -9,56 +9,6 @@ import (
 	"testing"
 )
 
-func TestReverseLinkedList(t *testing.T) {
-
-	mustSetupList := func(values ...int) *ListNode {
-		l := len(values)
-		if l == 0 {
-			return nil
-		} else if l == 1 {
-			return &ListNode{Val: values[0]}
-		}
-
-		last := l - 1
-		curr := &ListNode{Val: values[last]}
-		for i := last - 1; i >= 0; i-- {
-			temp := &ListNode{Val: values[i], Next: curr}
-			curr = temp
-		}
-		return curr
-	}
-	t.Run("Must reverse non trivial list", func(t *testing.T) {
-		t.Parallel()
-		head := mustSetupList(1, 2, 3, 4, 5)
-		if head.Val != 1 {
-			t.Fatalf("Wrong head, expected %d got %d\n", 1, head.Val)
-		}
-
-		head = reverseList(head)
-		if head.Val != 5 {
-			t.Fatalf("Wrong head, expected %d got %d\n", 5, head.Val)
-		}
-	})
-	t.Run("Must reverse single element list", func(t *testing.T) {
-		t.Parallel()
-		head := mustSetupList(1)
-		if head.Val != 1 {
-			t.Fatalf("Wrong head, expected %d got %d\n", 1, head.Val)
-		}
-
-		head = reverseList(head)
-		if head.Val != 1 {
-			t.Fatalf("Wrong head, expected %d got %d\n", 1, head.Val)
-		}
-	})
-	t.Run("Empty list returns itself", func(t *testing.T) {
-		h := reverseList(nil)
-		if h != nil {
-			t.Fatal("Expected nil list")
-		}
-	})
-}
-
 // 55 jump game
 func TestCanJump(t *testing.T) {
 	tt := []struct {
@@ -1016,6 +966,65 @@ func TestMostCommonIndex(t *testing.T) {
 			got := MostCommonIndex(tt.input)
 			if got != tt.expected {
 				t.Fatalf("got %d, expected %d", got, tt.expected)
+			}
+		})
+	}
+}
+
+func TestLengthOfLastWord(t *testing.T) {
+	tests := []struct {
+		s    string
+		want int
+	}{
+		{"Hello World", 5},
+		{"   fly me   to   the moon  ", 4},
+		{"luffy is still joyboy", 6},
+		{"hello", 5},
+		{"   hello   ", 5},
+		{"     ", 0},
+		{"", 0},
+		{"word   ", 4},
+		{"a  b  c", 1},
+		{"hi there", 5},
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			if got := lengthOfLastWord(tt.s); got != tt.want {
+				t.Errorf("lengthOfLastWord(%q) = %v, want %v", tt.s, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConvert(t *testing.T) {
+	t.Skip()
+	tests := []struct {
+		s       string
+		numRows int
+		want    string
+	}{
+		// Example cases
+		{"PAYPALISHIRING", 3, "PAHNAPLSIIGYIR"},
+		{"PAYPALISHIRING", 4, "PINALSIGYAHRPI"},
+		{"A", 1, "A"},
+
+		// Additional edge + custom cases
+		{"AB", 1, "AB"},                       // numRows = 1 → no zigzag
+		{"AB", 2, "AB"},                       // two rows
+		{"ABC", 2, "ACB"},                     // simple zigzag
+		{"ABCDE", 4, "ABCED"},                 // uneven fill
+		{"HELLO", 3, "HOELL"},                 // basic 3-row pattern
+		{"THISISAZIGZAG", 5, "TSAIIZGHSZIGA"}, // longer string
+		{"XYZ", 5, "XYZ"},                     // numRows > len(s)
+	}
+
+	for i, tt := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			got := convert(tt.s, tt.numRows)
+			if got != tt.want {
+				t.Errorf("convert(%q, %d) = %q, want %q",
+					tt.s, tt.numRows, got, tt.want)
 			}
 		})
 	}

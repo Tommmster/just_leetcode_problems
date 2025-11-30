@@ -6,22 +6,121 @@ import (
 	"testing"
 )
 
+func TestLinkedListLength(t *testing.T) {
+	tt := []struct {
+		vals []int
+		l    int
+	}{
+		{
+			vals: []int{},
+			l:    0,
+		},
+		{
+			vals: []int{1},
+			l:    1,
+		},
+		{
+			vals: []int{1, 2, 3, 4, 5, 6},
+			l:    6,
+		},
+	}
+
+	for i, tc := range tt {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			head := listFromSlice(tc.vals)
+			if got := length(head); got != tc.l {
+				t.Fatalf("[%s] Failed: Expected %d, got %d", t.Name(), tc.l, got)
+			}
+		})
+	}
+}
+
+func TestLinkedListSplit(t *testing.T) {
+	tt := []struct {
+		val []int
+		l   int
+		el  []int // expected low half
+		eh  []int // expected high half
+	}{
+		{
+			val: []int{1, 2, 3, 4, 5},
+			l:   2,
+			el:  []int{1, 2},
+			eh:  []int{3, 4, 5},
+		},
+		{
+			val: []int{1, 2, 3, 4, 5},
+			l:   10,
+			el:  []int{1, 2, 3, 4, 5},
+			eh:  []int{},
+		},
+		{
+			val: []int{1, 2, 3, 4, 5},
+			l:   0,
+			el:  []int{},
+			eh:  []int{1, 2, 3, 4, 5},
+		},
+		{
+			val: []int{},
+			l:   5,
+			el:  []int{},
+			eh:  []int{},
+		},
+	}
+
+	for i, tc := range tt {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			head := listFromSlice(tc.val)
+			gl, gh := split(head, tc.l)
+
+			if got := sliceFromList(gl); !reflect.DeepEqual(tc.el, got) {
+				t.Fatalf("Expected %v got %v", tc.el, got)
+			}
+
+			if len(tc.eh) == 0 && gh != nil {
+				t.Fatal("Unexpected second half")
+			}
+
+			if got := sliceFromList(gh); !reflect.DeepEqual(tc.eh, got) {
+				t.Fatalf("Expected %v got %v", tc.eh, got)
+			}
+		})
+	}
+}
+
+func TestSortLinkedList(t *testing.T) {
+	tt := []struct {
+		vs []int
+		ex []int
+	}{
+		{
+			vs: []int{2, 1},
+			ex: []int{1, 2},
+		},
+		{
+			vs: []int{},
+			ex: []int{},
+		},
+		{
+			vs: []int{1},
+			ex: []int{1},
+		},
+	}
+
+	for i, tc := range tt {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			h := listFromSlice(tc.vs)
+			s := SortList(h)
+			if got := sliceFromList(s); !reflect.DeepEqual(tc.ex, got) {
+				t.Fatalf("Expected %v, got %v\n", []int{1, 2}, got)
+			}
+		})
+	}
+}
+
 func TestReverseLinkedList(t *testing.T) {
 	mustSetupList := func(values ...int) *ListNode {
-		l := len(values)
-		if l == 0 {
-			return nil
-		} else if l == 1 {
-			return &ListNode{Val: values[0]}
-		}
-
-		last := l - 1
-		curr := &ListNode{Val: values[last]}
-		for i := last - 1; i >= 0; i-- {
-			temp := &ListNode{Val: values[i], Next: curr}
-			curr = temp
-		}
-		return curr
+		return listFromSlice(values)
 	}
 	t.Run("Must reverse non trivial list", func(t *testing.T) {
 		t.Parallel()

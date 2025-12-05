@@ -35,3 +35,21 @@ func nodeAt(head *ListNode, idx int) *ListNode {
 	}
 	return head
 }
+
+// Return the number of nodes starting from the head
+func length(head *ListNode) int {
+	// While a recursive implementation is much more elegant (Meine Meinung)
+	// Go's compiler does not guarantee Tail Call Optimization, so we're
+	// being safe and using an old fashioned for-loop
+	var (
+		count int = 0
+		node      = head
+	)
+
+	for node != nil {
+		count++
+		node = node.Next
+	}
+
+	return count
+}

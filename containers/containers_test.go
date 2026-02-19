@@ -73,3 +73,54 @@ func TestHeap(t *testing.T) {
 		}
 	})
 }
+
+func TestQueue(t *testing.T) {
+
+	t.Parallel()
+	t.Run("Peeking an empty queue is an error", func(t *testing.T) {
+		q := NewQueue[int32]()
+		if _, err := q.Peek(); err == nil {
+			t.Fatal("expected an error")
+		}
+	})
+
+	t.Run("Peek returns the first inserted value", func(t *testing.T) {
+		q := NewQueue[int32]()
+		q.Push(3)
+		if v, _ := q.Peek(); v != 3 {
+			t.Fatalf("Unexpected value: %d", v)
+		}
+
+		q.Push(5)
+		if v, _ := q.Peek(); v != 3 {
+			t.Fatalf("Unexpected value: %d", v)
+		}
+	})
+
+	t.Run("Peek Last returns the most recent inserted value", func(t *testing.T) {
+		q := NewQueue[int32](11, 12)
+		if last, _ := q.PeekLast(); last != 12 {
+			t.Fatalf("Unexpected value: %d", last)
+		}
+
+		if siz := q.Size(); siz != 2 {
+			t.Fatalf("Unexpected size: %d", siz)
+		}
+	})
+
+	t.Run("Pop removes the first value", func(t *testing.T) {
+		q := NewQueue[int32](3, 5)
+
+		if h, _ := q.Pop(); h != 3 {
+			t.Fatalf("Expected the first value, got %d", h)
+		}
+
+		if h, _ := q.Pop(); h != 5 {
+			t.Fatalf("Expected the first value, got %d", h)
+		}
+
+		if _, err := q.Pop(); err == nil {
+			t.Fatal("Expected an error")
+		}
+	})
+}

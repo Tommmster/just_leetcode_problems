@@ -1,6 +1,9 @@
 package containers
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func TestHeap(t *testing.T) {
 	mustSetUp := func(maxSize int, values ...int) *Heap {
@@ -75,11 +78,10 @@ func TestHeap(t *testing.T) {
 }
 
 func TestQueue(t *testing.T) {
-
 	t.Parallel()
 	t.Run("Peeking an empty queue is an error", func(t *testing.T) {
 		q := NewQueue[int32]()
-		if _, err := q.Peek(); err == nil {
+		if _, err := q.Peek(); !errors.Is(err, ErrEmptyQueue) {
 			t.Fatal("expected an error")
 		}
 	})
@@ -119,7 +121,7 @@ func TestQueue(t *testing.T) {
 			t.Fatalf("Expected the first value, got %d", h)
 		}
 
-		if _, err := q.Pop(); err == nil {
+		if _, err := q.Pop(); !errors.Is(err, ErrEmptyQueue) {
 			t.Fatal("Expected an error")
 		}
 	})
